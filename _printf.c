@@ -1,83 +1,72 @@
 #include "main.h"
 
 /**
- * check_format - checks if there is a valid format specifier
- * @format: possible valid format specifier
- * Return: pointer to valid function or NULL
+ * _printfunc - get the right function corresponding to format specified
+ * @fi: input format
+ * Return:pointer to function that corresponds with specified format
+ *
  */
-int (*check_format(const char *format))(va_list)
+int (*_printfunc(char fi))(va_list)
 {
 	int i = 0;
-	print_t p[] = {
-		{"c", print_c},
-		{"s", print_s},
-		{"i", print_i},
-		{"d", print_d},
-		{"b", print_b},
-		{"u", print_u},
-		{"o", print_o},
-		{"x", print_x},
-		{"X", print_X},
-		{"p", print_p},
-		{"S", print_S},
-		{"r", print_r},
-		{"R", print_R},
-		{NULL, NULL}
+	print_f f[] = {
+		{'c', printchar},
+		{'s', printstr},
+		{'d', printint},
+		{'i', printint},
+		{'\0', NULL}
 	};
-
-	for (; p[i].t != NULL; i++)
+	while (f[i].type)
 	{
-		if (*(p[i].t) == *format)
-			break;
+		if (fi == f[i].type)
+		{
+			return (f[i].funct);
+		}
+		i++;
+
 	}
-	return (p[i].f);
+	return (NULL);
 }
 
 /**
- * _printf - function for format printing
- * @format: list of arguments to print
- * Return: Number of characters to print
+ * _printf - function that produces output according to format passed
+ * @format: character string containing 0 or more directive
+ * Return: number of chars printed exluding null byte
  */
 int _printf(const char *format, ...)
 {
-	va_list ap;
-	int (*f)(va_list);
-	unsigned int i = 0, counter = 0;
+	int i, counter;
+
+	int (*fn)(va_list);
+
+	va_list a_list;
 
 	if (format == NULL)
 		return (-1);
 
-	va_start(ap, format);
-	while (format && format[i])
+	va_start(a_list, format);
+	i = counter = 0;
+
+	while (format[i] != '\0')
 	{
-		if (format[i] != '%')
+		if (format[i] == '%')
 		{
-			_putchar(format[i]);
-			counter++;
+			if (format[i + 1] == '\0')
+				return (-1);
+			fn = _printfunc(format[i + 1]);
+			if (fn == NULL)
+				counter += printNaN(format[i], format[i + 1]);
+			else
+				counter += fn(a_list);
 			i++;
-			continue;
 		}
 		else
 		{
-			if (format[i + 1] == '%')
-			{
-				_putchar('%');
-				counter++;
-				i += 2;
-				continue;
-			}
-			else
-			{
-				f = check_format(&format[i + 1]);
-				if (f == NULL)
-					return (-1);
-				i += 2;
-				counter += f(ap);
-				continue;
-			}
+			_putchar(format[i]);
+			counter++;
 		}
 		i++;
 	}
-	va_end(ap);
+	va_end(a_list);
 	return (counter);
 }
