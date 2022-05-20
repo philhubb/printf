@@ -1,7 +1,8 @@
 #include "main.h"
 
 /**
- * _printfunc - A code that gets the right function corresponding to format specified
+ * _printfunc - A code that gets the right function corresponding to format
+ * specified
  * @fi: input format
  * Return: pointer of the function that corresponds with specified format
  */
