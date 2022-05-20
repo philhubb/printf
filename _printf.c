@@ -1,10 +1,9 @@
 #include "main.h"
 
 /**
- * _printfunc - get the right function corresponding to format specified
+ * _printfunc - A code that gets the right function corresponding to format specified
  * @fi: input format
- * Return:pointer to function that corresponds with specified format
- *
+ * Return: pointer of the function that corresponds with specified format
  */
 int (*_printfunc(char fi))(va_list)
 {
