@@ -34,6 +34,7 @@ int (*_printfunc(char fi))(va_list)
  * Return: number of chars printed exluding null byte
  */
 int _printf(const char *format, ...)
+
 {
 	int i, counter;
 
@@ -55,7 +56,8 @@ int _printf(const char *format, ...)
 				return (-1);
 			fn = _printfunc(format[i + 1]);
 			if (fn == NULL)
-				counter += printNaN(format[i], format[i + 1]);
+			counter += printNaN(format[i], format[i + 1]);
+
 			else
 				counter += fn(a_list);
 			i++;
@@ -65,8 +67,10 @@ int _printf(const char *format, ...)
 			_putchar(format[i]);
 			counter++;
 		}
+
 		i++;
 	}
 	va_end(a_list);
 	return (counter);
+
 }
